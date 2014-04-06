@@ -7,7 +7,7 @@ This is [a long awaited feature](https://github.com/angular-ui/bootstrap/issues/
 
 While the official implementation is not available, I am using this custom implementation.
 
-Usage: identical to the offical popover; the only difference is - instead of
+Usage: [identical to the offical popover](http://angular-ui.github.io/bootstrap/#/popover); the only difference is - instead of
 
     popover="contents"
 
