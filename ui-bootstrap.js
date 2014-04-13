@@ -2,7 +2,7 @@
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
 
- * Version: 0.10.3 - 2014-04-12
+ * Version: 0.10.4 - 2014-04-12
  * License: MIT
  */
 angular.module("ui.bootstrap", ["ui.bootstrap.transition","ui.bootstrap.collapse","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.bindHtml","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.dropdownToggle","ui.bootstrap.modal","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]);
@@ -2106,10 +2106,6 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap
         compile: function (tElem, tAttrs) {
           var tooltipLinker = $compile( template );
           
-          if (tAttrs.popoverTemplate) {
-              var httpTemplate = $http.get( tAttrs.popoverTemplate, { cache: $templateCache } );
-          }
-
           return function link ( scope, element, attrs ) {
             var tooltip;
             var transitionTimeout;
@@ -2119,8 +2115,9 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap
             var hasRegisteredTriggers = false;
             var hasEnableExp = angular.isDefined(attrs[prefix+'Enable']);
 
-            if (httpTemplate) {
-              httpTemplate.then( function(response) {
+            if ( attrs.popoverTemplate ) {
+              $http.get( scope.$parent.$eval( attrs.popoverTemplate ), { cache: $templateCache } )
+              .then( function ( response ) {
                 scope.tt_template = $compile( response.data.trim() )( scope.$parent );
               });
             }
