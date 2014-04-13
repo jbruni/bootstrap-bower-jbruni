@@ -2,7 +2,7 @@
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
 
- * Version: 0.10.4 - 2014-04-12
+ * Version: 0.10.5 - 2014-04-12
  * License: MIT
  */
 angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.transition","ui.bootstrap.collapse","ui.bootstrap.accordion","ui.bootstrap.alert","ui.bootstrap.bindHtml","ui.bootstrap.buttons","ui.bootstrap.carousel","ui.bootstrap.position","ui.bootstrap.datepicker","ui.bootstrap.dropdownToggle","ui.bootstrap.modal","ui.bootstrap.pagination","ui.bootstrap.tooltip","ui.bootstrap.popover","ui.bootstrap.progressbar","ui.bootstrap.rating","ui.bootstrap.tabs","ui.bootstrap.timepicker","ui.bootstrap.typeahead"]);
@@ -2116,13 +2116,6 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap
             var hasRegisteredTriggers = false;
             var hasEnableExp = angular.isDefined(attrs[prefix+'Enable']);
 
-            if ( attrs.popoverTemplate ) {
-              $http.get( scope.$parent.$eval( attrs.popoverTemplate ), { cache: $templateCache } )
-              .then( function ( response ) {
-                scope.tt_template = $compile( response.data.trim() )( scope.$parent );
-              });
-            }
-
             var positionTooltip = function (){
               var position,
                 ttWidth,
@@ -2311,6 +2304,14 @@ angular.module( 'ui.bootstrap.tooltip', [ 'ui.bootstrap.position', 'ui.bootstrap
               scope.tt_popupDelay = ! isNaN(delay) ? delay : options.popupDelay;
             });
 
+            attrs.$observe( 'popoverTemplate', function ( val ) {
+              if ( !val ) { return; }
+              $http.get( val, { cache: $templateCache } )
+              .then( function ( response ) {
+                scope.tt_template = $compile( response.data.trim() )( scope.$parent );
+              });
+            });
+
             var unregisterTriggers = function() {
               if (hasRegisteredTriggers) {
                 element.unbind( triggers.show, showTooltipBind );
@@ -2418,10 +2419,11 @@ angular.module( 'ui.bootstrap.popover', [ 'ui.bootstrap.tooltip' ] )
     scope: { title: '@', template: '=', placement: '@', animation: '&', isOpen: '&' },
     templateUrl: 'template/popover/popover-template.html',
     link: function( scope, iElement ) {
-      var unwatch = scope.$watch( 'template', function( template ) {
+      var contentEl = angular.element( iElement[0].querySelector( '.popover-content' ) );
+      scope.$watch( 'template', function( template ) {
         if ( !template ) { return; }
-        angular.element( iElement[0].querySelector( '.popover-content' ) ).append( template );
-        unwatch();
+        contentEl.children().remove();
+        contentEl.append( template );
       });
     }
   };

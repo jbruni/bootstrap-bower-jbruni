@@ -3,7 +3,7 @@
         "name": "https://github.com/angular-ui/bootstrap/graphs/contributors"
     },
     "name": "angular-bootstrap-jbruni",
-    "version": "0.10.4",
+    "version": "0.10.5",
     "main": ["./ui-bootstrap-tpls.js"],
     "dependencies": {
         "angular": ">=1"
