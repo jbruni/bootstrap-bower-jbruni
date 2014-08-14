@@ -908,6 +908,8 @@ angular.module('ui.bootstrap.position', [])
 
         var positionStrParts = positionStr.split('-');
         var pos0 = positionStrParts[0], pos1 = positionStrParts[1] || 'center';
+        var arrowWidth = 25;
+        var arrowHeight = 25;
 
         var hostElPos,
           targetElWidth,
@@ -924,9 +926,12 @@ angular.module('ui.bootstrap.position', [])
             return hostElPos.left + hostElPos.width / 2 - targetElWidth / 2;
           },
           left: function () {
-            return hostElPos.left;
+            return hostElPos.left + hostElPos.width / 2 - arrowWidth;
           },
           right: function () {
+            if (pos0 === 'bottom'){
+              return hostElPos.left + hostElPos.width / 2 - targetElWidth + arrowWidth;
+            }
             return hostElPos.left + hostElPos.width;
           }
         };
@@ -936,6 +941,9 @@ angular.module('ui.bootstrap.position', [])
             return hostElPos.top + hostElPos.height / 2 - targetElHeight / 2;
           },
           top: function () {
+            if (positionStrParts.length === 2){
+              return hostElPos.top + hostElPos.height / 2 - arrowHeight;
+            }
             return hostElPos.top;
           },
           bottom: function () {
